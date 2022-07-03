@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>true</IsPackable>
+    <RepositoryUrl>https://github.com/Vegari-1/BusService</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="NATS.Client" />
+    <None Remove="Microsoft.Extensions.Hosting.Abstractions" />
+    <None Remove="Microsoft.Extensions.Hosting" />
+    <None Remove="Microsoft.Extensions.Options" />
+    <None Remove="Contracts\" />
+    <None Remove="Routing\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NATS.Client" Version="0.14.8" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Contracts\" />
+    <Folder Include="Routing\" />
+  </ItemGroup>
+</Project>

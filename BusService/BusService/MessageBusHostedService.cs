@@ -20,14 +20,25 @@ namespace BusService
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            Subscribers.ForEach((subscriber) => _eventSubscription.Add(_serviceBus.SubscribeEvent(subscriber.Subject, subscriber.Handler)));
+            Subscribers.ForEach(Subscribe);
             return Task.CompletedTask;
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            _eventSubscription.ForEach((subscription) => subscription.Unsubscribe());
+            _eventSubscription.ForEach(Unsubscribe);
             return Task.CompletedTask;
+        }
+
+        private void Subscribe(MessageBusSubscriber subscriber)
+        {
+            _eventSubscription.Add(_serviceBus.SubscribeEvent(subscriber.Subject, subscriber.Handler));
+        }
+
+        private void Unsubscribe(IAsyncSubscription subscription)
+        {
+            if (subscription.IsValid)
+                subscription.Unsubscribe();
         }
     }
 }

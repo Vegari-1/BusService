@@ -37,8 +37,12 @@ namespace BusService
 
         private void Unsubscribe(IAsyncSubscription subscription)
         {
-            if (subscription.IsValid)
-                subscription.Unsubscribe();
+            try
+            {
+                if (subscription.IsValid)
+                    subscription.Unsubscribe();
+            }
+            catch (Exception e) { }
         }
     }
 }

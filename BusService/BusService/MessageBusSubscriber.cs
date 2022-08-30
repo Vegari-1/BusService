@@ -1,17 +1,19 @@
 ﻿using NATS.Client;
+using Polly;
 
 namespace BusService
 {
     public class MessageBusSubscriber
     {
-        public string Subject;   
-        public EventHandler<MsgHandlerEventArgs> Handler;
+        public string Subject;
+        public Type ConsumerType;
+        public Policy Policy;
 
-        public MessageBusSubscriber(string subject, EventHandler<MsgHandlerEventArgs> handler)
+        public MessageBusSubscriber(Policy policy, string subject, Type consumerType)
         {
             Subject = subject;
-            Handler = handler;
+            ConsumerType = consumerType;
+            Policy = policy;
         }
-
     }
 }

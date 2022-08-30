@@ -5,6 +5,6 @@ namespace BusService
 {
     public interface IConsumer
     {
-        EventHandler<MsgHandlerEventArgs> BuildConsumerMethod(Policy policy);
+        Task Consume(string sender, byte[] data, Policy policy);
     }
 }

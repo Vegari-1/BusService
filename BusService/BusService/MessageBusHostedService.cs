@@ -1,16 +1,19 @@
-﻿using NATS.Client;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+
+using NATS.Client;
 
 namespace BusService
 {
     public abstract class MessageBusHostedService : IHostedService
     {
         private readonly IMessageBusService _serviceBus;
+        private IServiceScopeFactory _serviceScopeFactory;
         private readonly List<IAsyncSubscription> _eventSubscription = new();
 
         protected List<MessageBusSubscriber> Subscribers = new();
 
-        public MessageBusHostedService(IMessageBusService serviceBus)
+        public MessageBusHostedService(IMessageBusService serviceBus, IServiceScopeFactory serviceScopeFactory)
         {
             _serviceBus = serviceBus;
             ConfigureSubscribers();
@@ -32,7 +35,17 @@ namespace BusService
 
         private void Subscribe(MessageBusSubscriber subscriber)
         {
-            _eventSubscription.Add(_serviceBus.SubscribeEvent(subscriber.Subject, subscriber.Handler));
+            _eventSubscription.Add(_serviceBus.SubscribeEvent(subscriber.Subject, HandleMessage(subscriber)));
+        }
+
+        private EventHandler<MsgHandlerEventArgs> HandleMessage(MessageBusSubscriber subscriber)
+        {
+            return async (sender, args) =>
+            {
+                using var scope = _serviceScopeFactory.CreateScope();
+                var instance = (IConsumer)scope.ServiceProvider.GetService(subscriber.ConsumerType);
+                await instance.Consume((string)sender, args.Message.Data, subscriber.Policy);
+            };
         }
 
         private void Unsubscribe(IAsyncSubscription subscription)

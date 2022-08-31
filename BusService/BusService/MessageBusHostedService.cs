@@ -8,13 +8,14 @@ namespace BusService
     public abstract class MessageBusHostedService : IHostedService
     {
         private readonly IMessageBusService _serviceBus;
-        private IServiceScopeFactory _serviceScopeFactory;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly List<IAsyncSubscription> _eventSubscription = new();
 
         protected List<MessageBusSubscriber> Subscribers = new();
 
         public MessageBusHostedService(IMessageBusService serviceBus, IServiceScopeFactory serviceScopeFactory)
         {
+            _serviceScopeFactory = serviceScopeFactory;
             _serviceBus = serviceBus;
             ConfigureSubscribers();
         }
@@ -44,7 +45,7 @@ namespace BusService
             {
                 using var scope = _serviceScopeFactory.CreateScope();
                 var instance = (IConsumer)scope.ServiceProvider.GetService(subscriber.ConsumerType);
-                await instance.Consume((string)sender, args.Message.Data, subscriber.Policy);
+                await instance.Consume(args.Message.Subject, args.Message.Data, subscriber.Policy);
             };
         }
 

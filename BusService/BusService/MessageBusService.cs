@@ -1,14 +1,18 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using NATS.Client;
 
 namespace BusService
 {
     public class MessageBusService : IMessageBusService
     {
+        private readonly ILogger<MessageBusService> _logger;
         private readonly IConnection _connection;
 
-        public MessageBusService(IOptions<MessageBusSettings> settings)
+        public MessageBusService(IOptions<MessageBusSettings> settings, ILogger<MessageBusService> logger)
         {
+            _logger = logger;
+            _logger.Log(LogLevel.Information, $"Attempt to create connection on: {settings.Value.Url}");
             _connection = new ConnectionFactory().CreateConnection(settings.Value.Url);
         }
 

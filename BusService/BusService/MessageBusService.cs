@@ -12,8 +12,9 @@ namespace BusService
         public MessageBusService(IOptions<MessageBusSettings> settings, ILogger<MessageBusService> logger)
         {
             _logger = logger;
+            _connection = new ConnectionFactory().CreateConnection("nats://nats:4222");
             _logger.Log(LogLevel.Information, $"Attempt to create connection on: {settings.Value.Url}");
-            _connection = new ConnectionFactory().CreateConnection(settings.Value.Url);
+            _logger.Log(LogLevel.Information, $"Connection: {settings.Value.Url}");
         }
 
         public void PublishEvent(string subject, byte[] data)

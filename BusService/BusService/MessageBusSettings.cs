@@ -1,7 +1,7 @@
 ﻿namespace BusService
 {
-    public class MessageBusSettings
+    public class MessageBusSettings : IMessageBusSettings
     {
-        public string Url;
+        public string Url { get; set; }
     }
 }

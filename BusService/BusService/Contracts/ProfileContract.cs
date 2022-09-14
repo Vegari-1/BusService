@@ -6,13 +6,17 @@
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Email { get; set; }
+        public string Username { get; set; }
+        public string Avatar { get; set; }
 
-        public ProfileContract(Guid id, string name, string surname, string email)
+        public ProfileContract(Guid id, string name, string surname, string email, string username, string avatar)
         {
             Id = id;
             Name = name;
             Surname = surname;
             Email = email;
+            Username = username;
+            Avatar = avatar;
         }
     }
 }

@@ -8,6 +8,9 @@
 		public static string User = "user";
 		public static string Notification = "notification";
 		public static string Profile = "profile";
+		public static string Connection = "connection";
+		public static string Block = "block";
+		public static string Event = "system_event";
 	}
 }
 
